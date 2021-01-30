@@ -1,0 +1,2 @@
+# obsidian-SelectionToLink
+Obsidian plugins
