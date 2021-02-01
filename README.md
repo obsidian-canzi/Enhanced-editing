@@ -11,11 +11,17 @@
 
 3、若所选文本中含有未成对的 `[[` 或 `]]` 符号，则不进行处理；
 
-二、默认快捷键 `Alt + Z` ，用户可从快捷键面板中自定义热键。
+二、自定义设置
+
+1、插件选项：允许设置 `[[附加字符` 来筛选标题列表；
+
+2、插件选项：允许设置 `、，。\s` 等连续标题的分隔符号；
+
+3、快捷键：默认为 `Alt + Z` ，可从快捷键面板中自定义热键。
 
 
 # 声明
 
-此插件系改编自[obsidian-sort-and-permute-lines](https://github.com/Vinzent03/obsidian-sort-and-permute-lines)，仅向原开发者致以诚挚的谢意。
+此插件系改编自[RTL Support](https://github.com/esm7/obsidian-rtl)[obsidian-sort-and-permute-lines](https://github.com/Vinzent03/obsidian-sort-and-permute-lines)，仅向原开发者致以诚挚的谢意。
 
 新人初学，水平有限，欢迎各位Obsidian爱好者指正。
