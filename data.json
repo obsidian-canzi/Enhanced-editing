@@ -1,1 +1,10 @@
-{"twoEnter":false,"hColor1":"#ED7002","hColor2":"#FF0212","hColor3":"#8F4FD9","hColor4":"#0077D8","hColor5":"#30CB29"}
+{
+  "twoEnter": true,
+  "isTab": true,
+  "version": "0.4.6",
+  "hColor1": "#ED7002",
+  "hColor2": "#FF0212",
+  "hColor3": "#8F4FD9",
+  "hColor4": "#0077D8",
+  "hColor5": "#30CB29"
+}
