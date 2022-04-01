@@ -77,6 +77,16 @@ info|信息|资讯
 - 在 《输入文字|》光标处按下快捷键可跳过》符号
 
 
+## 安装方法
+**【增强编辑】插件短期内不会上架社区商店**
+
+### 手动安装：
+手动下载最新的压缩包，然后将其中的三个文件(main.js, manifest.json, data.json) 解压到 **库目录/.obsidian/plugins/ZH增强编辑** 文件夹即可.
+
+### BRAT 插件安装：
+安装 BRAT 插件： [点此安装](https://github.com/TfTHacker/obsidian42-brat)
+在 BART 插件设置面板添加： obsidian-canzi/Enhanced-editing
+
 
 ## 功能说明
 ### 转换内部链接
@@ -179,12 +189,3 @@ info|信息|资讯
 
 >欢迎向蚕子(QQ:312815311) 提出操作需求和建议，我们为增强编辑功能来共同努力！
 
-## 安装方法
-==【增强编辑】插件短期内不会上架社区商店==
-
-### 手动安装：
-手动下载最新的压缩包，然后将其中的三个文件解压到 (main.js, manifest.json, data.json) {{obsidian_vault}}/.obsidian/plugins/ZH增强编辑 文件夹即可.
-
-### BRAT 插件安装：
-安装 BRAT 插件： [点此安装](https://github.com/TfTHacker/obsidian42-brat)
-在 BART 插件设置面板添加： obsidian-canzi/Enhanced-editing
