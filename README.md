@@ -10,9 +10,11 @@
 	- 所选文本中如出现 "|[]?\*<>/: 等符号，此功能不会执行。
 ![转换内部链接](https://user-images.githubusercontent.com/16410542/161436655-eb4f5ee7-9b7c-44ee-964a-f943e64dec50.gif)
 2. 「Alt+Q」 将选文转换为 \[\[|选文]] 样式，方便选择笔记名
+![转为同名链接](https://user-images.githubusercontent.com/16410542/161436841-e2cb7ae3-e39b-4a08-88de-5f9c475d539d.gif)
 
 ### ☑️ 智能符号
-- 「Alt+;」 自动转换、匹配或跳过各种类型的括号符号
+3. 「Alt+;」 自动转换、匹配或跳过各种类型的括号符号
+![智能符号](https://user-images.githubusercontent.com/16410542/161437355-79562ee8-60a7-41d5-85d2-d0ca5da495ba.gif)
 - 判断前后字符，要么跳过后半部分引号，要么自动补全相关括号。
 - 行首遇特殊字符时的转换（参考Easy Typing插件）
 	-  》  → >
