@@ -3,14 +3,16 @@
 ## 📣 功能说明
 ### ☑️ 转换内部链接
 1. 「Alt+Z」 在选文两端添加或去除 \[\[ ]] 符号
+![转换内部链接](https://user-images.githubusercontent.com/16410542/161437571-10987a6d-ff0f-4ef1-9193-f2b0602f18e4.gif)
 	- 若未选中文本，视光标位置分两种情况处理
 		- 若光标处在\[\[链接|文字]]当中，则自动去除外围的链接符号
 		- 若光标未处在链接当中，则直接输出\[\[字符
 	- 支持批量转换用换行符分隔的被选中的多行文本或用顿号分隔的被选中的多个字符串。
 	- 所选文本中如出现 "|[]?\*<>/: 等符号，此功能不会执行。
-![转换内部链接](https://user-images.githubusercontent.com/16410542/161436655-eb4f5ee7-9b7c-44ee-964a-f943e64dec50.gif)
+
 2. 「Alt+Q」 将选文转换为 \[\[|选文]] 样式，方便选择笔记名
-![转为同名链接](https://user-images.githubusercontent.com/16410542/161436841-e2cb7ae3-e39b-4a08-88de-5f9c475d539d.gif)
+![转为同名链接](https://user-images.githubusercontent.com/16410542/161437746-24db8f7a-c2f9-466e-b0d1-c16ade9bbcfc.gif)
+
 
 ### ☑️ 智能符号
 3. 「Alt+;」 自动转换、匹配或跳过各种类型的括号符号
