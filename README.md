@@ -44,6 +44,8 @@
 	- qy  → ```query```
 	- mm → ```mermaid```
 	- 也支持 js css ph c java py等语言名称缩写
+- 判断当前行内容，如为 `Callout语法类型 对齐方式 +/` 样式，则转为Callout语法引用块
+![转换callout语法](https://user-images.githubusercontent.com/16410542/161438754-b58e903f-514e-46e5-b71f-9dbcde406db7.gif)
 
 
 ### ☑️ 转换 MarkDown 语法
