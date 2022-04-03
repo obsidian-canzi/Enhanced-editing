@@ -1,16 +1,5 @@
 **【增强编辑】插件旨在增强Obsidian软件的文本编辑操作，力求人性化、智能化、自动化处理当前页面文字。**
 
-## 📣 安装方法
-【增强编辑】插件短期内不会上架社区商店
-
-### 1.手动安装：
-手动下载最新的压缩包，然后将其中文件(main.js, manifest.json) 解压到 **库目录/.obsidian/plugins/ZH增强编辑** 文件夹即可.
-
-### 2.BRAT 插件安装：
-- 安装 BRAT 插件： [点此安装](https://github.com/TfTHacker/obsidian42-brat)
-- 在 BART 插件设置面板添加： obsidian-canzi/Enhanced-editing
-
-
 ## 📣 功能说明
 ### 转换内部链接
 - 「Alt+Z」 在选文两端添加或去除 \[\[ ]] 符号
@@ -109,4 +98,14 @@
 
 
 >欢迎向蚕子(QQ:312815311) 提出操作需求和建议，我们为增强编辑功能来共同努力！
+
+## 📣 安装方法
+【增强编辑】插件短期内不会上架社区商店
+
+### 1.手动安装：
+手动下载最新的压缩包，然后将其中文件(main.js, manifest.json) 解压到 **库目录/.obsidian/plugins/ZH增强编辑** 文件夹即可.
+
+### 2.BRAT 插件安装：
+- 安装 BRAT 插件： [点此安装](https://github.com/TfTHacker/obsidian42-brat)
+- 在 BART 插件设置面板添加： obsidian-canzi/Enhanced-editing
 
