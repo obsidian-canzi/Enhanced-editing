@@ -1,7 +1,7 @@
 {
   "id": "Enhanced-editing",
   "name": "ZH增强编辑",
-  "version": "0.4.8",
+  "version": "0.4.9",
   "minAppVersion": "0.12.0",
   "description": "增强大量文本编辑功能，如（批量）转换内链、智能括号、智能换行、转换Markdown语法、设置文字及背景颜色、粘贴excel表格、增减空行或空格、转换中英标点等。",
   "author": "obsidian-canzi",
