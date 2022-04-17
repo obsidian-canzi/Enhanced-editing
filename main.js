@@ -5,7 +5,7 @@ var obsidian = require('obsidian');
 /* *****************************************************************************
 使用声明
 ZH增强编辑插件借鉴多款社区插件开发而成，蚕子水平有限，代码或有缺陷，不能保证任何操作均会正常，请在使用之前备份库笔记，谢谢配合。
-开发：蚕子 QQ：312815311 更新时间：2022-4-16
+开发：蚕子 QQ：312815311 更新时间：2022-4-17
 ***************************************************************************** */
 
 var en = {
@@ -36,7 +36,7 @@ var zhCN = {
     helloWorld: '<b>欢迎使用增强编辑插件！</b>',
     qq: '查看 <a href="https://github.com/obsidian-canzi/Enhanced-editing/releases">Github 页面</a>，联系<a href="http://wpa.qq.com/msgrd?v=3&uin=312815311&site=qq&menu=yes">蚕子</a>',
     close: '点击此处 可关闭提示窗口......',
-    FunctionUpdate: 'v0.5.1 版本\n- 状态栏显示多彩高亮格式刷菜单 \n- 状态栏显示MD语法格式刷菜单 \n- 状态栏显示实用功能菜单 \n- 增加划选数字进行运算功能 \n- 完善行内插入制表符功能 \n- 修复行首缩进两字符功能 \n- ...',
+    FunctionUpdate: 'v0.5.1 版本\n- 状态栏显示Markdown及Html语法格式刷  \n- 状态栏显示实用功能菜单 \n- 增加划选数字进行运算功能 \n- 完善行内插入制表符功能 \n- 修复行首缩进两字符功能 \n- ...',
     setInterTab: '📣 插入制表符「Tab」 在普通文本行中插入制表符效果',
     whenEnabledTab: '启用此项后，在普通文本行中按下 Tab 键会插入4个空格，不再整行缩进。',
     convertInternalLink: '📣 转换内部链接「Alt+Z」：在选文两端添加或去除 [[ ]] 符号',
@@ -52,9 +52,12 @@ var zhCN = {
     isConvertCursorJump: '控制光标在标题、列表项、待办事项、代码块和引用等文本行之间来回跳转，或在粗体、突出显示、注释、删除和链接等Markdown语法之间来回跳转',
 };
 
-const superscriptGlyph ='<svg xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path fill="currentColor"d="M16 7.41L11.41 12L16 16.59L14.59 18L10 13.41L5.41 18L4 16.59L8.59 12L4 7.41L5.41 6L10 10.59L14.59 6L16 7.41M21.85 9h-4.88V8l.89-.82c.76-.64 1.32-1.18 1.7-1.63c.37-.44.56-.85.57-1.23a.884.884 0 0 0-.27-.7c-.18-.19-.47-.28-.86-.29c-.31.01-.58.07-.84.17l-.66.39l-.45-1.17c.27-.22.59-.39.98-.53S18.85 2 19.32 2c.78 0 1.38.2 1.78.61c.4.39.62.93.62 1.57c-.01.56-.19 1.08-.54 1.55c-.34.48-.76.93-1.27 1.36l-.64.52v.02h2.58V9z"/></svg>';
-const subscriptGlyph = '<svg xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path fill="currentColor" d="M16 7.41L11.41 12L16 16.59L14.59 18L10 13.41L5.41 18L4 16.59L8.59 12L4 7.41L5.41 6L10 10.59L14.59 6L16 7.41m5.85 13.62h-4.88v-1l.89-.8c.76-.65 1.32-1.19 1.7-1.63c.37-.44.56-.85.57-1.24a.898.898 0 0 0-.27-.7c-.18-.16-.47-.28-.86-.28c-.31 0-.58.06-.84.18l-.66.38l-.45-1.17c.27-.21.59-.39.98-.53s.82-.24 1.29-.24c.78.04 1.38.25 1.78.66c.4.41.62.93.62 1.57c-.01.56-.19 1.08-.54 1.55c-.34.47-.76.92-1.27 1.36l-.64.52v.02h2.58v1.35z"/></svg>';
-
+const 上标图标 ='<svg xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path fill="currentColor"d="M16 7.41L11.41 12L16 16.59L14.59 18L10 13.41L5.41 18L4 16.59L8.59 12L4 7.41L5.41 6L10 10.59L14.59 6L16 7.41M21.85 9h-4.88V8l.89-.82c.76-.64 1.32-1.18 1.7-1.63c.37-.44.56-.85.57-1.23a.884.884 0 0 0-.27-.7c-.18-.19-.47-.28-.86-.29c-.31.01-.58.07-.84.17l-.66.39l-.45-1.17c.27-.22.59-.39.98-.53S18.85 2 19.32 2c.78 0 1.38.2 1.78.61c.4.39.62.93.62 1.57c-.01.56-.19 1.08-.54 1.55c-.34.48-.76.93-1.27 1.36l-.64.52v.02h2.58V9z"/></svg>';
+const 下标图标 = '<svg xmlns="http://www.w3.org/2000/svg" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path fill="currentColor" d="M16 7.41L11.41 12L16 16.59L14.59 18L10 13.41L5.41 18L4 16.59L8.59 12L4 7.41L5.41 6L10 10.59L14.59 6L16 7.41m5.85 13.62h-4.88v-1l.89-.8c.76-.65 1.32-1.19 1.7-1.63c.37-.44.56-.85.57-1.24a.898.898 0 0 0-.27-.7c-.18-.16-.47-.28-.86-.28c-.31 0-.58.06-.84.18l-.66.38l-.45-1.17c.27-.21.59-.39.98-.53s.82-.24 1.29-.24c.78.04 1.38.25 1.78.66c.4.41.62.93.62 1.57c-.01.56-.19 1.08-.54 1.55c-.34.47-.76.92-1.27 1.36l-.64.52v.02h2.58v1.35z"/></svg>';
+const 格式刷图标 ='<svg t="1650117667147" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12959" width="120" height="120"><path d="M409.856 331.9296l103.1936-103.168 307.712 307.712-103.168 103.168z" fill="#777677" p-id="12960"></path><path d="M384 358.4s-153.6 128-256 99.84c23.04 38.4 53.76 76.8 51.2 79.36 79.36 17.92 204.8-51.2 204.8-51.2l25.6 25.6s-133.12 102.4-204.8 76.8c66.56 99.84 212.48 225.28 256 256 97.28 0 230.4-179.2 230.4-179.2L384 358.4z" fill="#FCAF6D" p-id="12961"></path><path d="M641.3568 306.9952l153.856-153.856 103.1936 103.168-153.856 153.856z" fill="#777677" p-id="12962"></path></svg>';
+const md语法图标 = '<svg t="1650122437266" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5178" width="120" height="120"><path d="M96 672v-341.333333h85.333333l128 128 128-128h85.333334v341.333333h-85.333334v-220.586667l-128 128-128-128v220.586667h-85.333333m597.333333-341.333333h128v170.666666h106.666667l-170.666667 192-170.666666-192h106.666666z" fill="#42A5F5" p-id="5179"></path></svg>';
+const 普通格式刷 ='<svg t="1650117667147" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12959" width="120" height="120"><path d="M409.856 331.9296l103.1936-103.168 307.712 307.712-103.168 103.168z" fill="#777677" p-id="12960"></path><path d="M384 358.4s-153.6 128-256 99.84c23.04 38.4 53.76 76.8 51.2 79.36 79.36 17.92 204.8-51.2 204.8-51.2l25.6 25.6s-133.12 102.4-204.8 76.8c66.56 99.84 212.48 225.28 256 256 97.28 0 230.4-179.2 230.4-179.2L384 358.4z" fill="#777677" p-id="12961"></path><path d="M641.3568 306.9952l153.856-153.856 103.1936 103.168-153.856 153.856z" fill="#777677" p-id="12962"></path></svg>';
+const 全局命令图标 = '<svg t="1650192738325" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="70946" width="110" height="110"><path d="M129.9 755.5625c-34.025 0-64.5 28.625-64.5 62.6875 0 34.0625 30.4625 64.5 64.5 64.5 34 0 62.6875-30.4375 62.6875-64.5C192.5875 784.1875 163.9 755.5625 129.9 755.5625zM129.9 447.4c-34.025 0-64.5 28.65-64.5 62.6875s30.4625 62.8125 64.5 62.8125c34 0 62.6875-28.775 62.6875-62.8125S163.9 447.4 129.9 447.4zM359.1875 259.3375 901.875 259.3375c32.25 0 59.125-25.0875 59.125-57.3125 0-32.25-26.875-59.125-59.125-59.125L359.1875 142.9c-32.275 0-59.125 26.875-59.125 59.125C300.0625 234.25 326.9 259.3375 359.1875 259.3375zM129.9 137.525c-34.025 0-64.5 30.4625-64.5 64.5 0 34 30.4625 62.6875 64.5 62.6875 34 0 62.6875-28.6875 62.6875-62.6875C192.5875 168 163.9 137.525 129.9 137.525zM901.875 451 359.1875 451c-32.275 0-59.125 26.8375-59.125 59.0875s26.8375 59.15 59.125 59.15L901.875 569.2375c32.25 0 59.125-26.9 59.125-59.15S934.125 451 901.875 451zM901.875 759.125 359.1875 759.125c-32.275 0-59.125 26.875-59.125 59.125 0 32.25 26.8375 59.125 59.125 59.125L901.875 877.375c32.25 0 59.125-26.875 59.125-59.125C961 786 934.125 759.125 901.875 759.125z" fill="#1290f8" p-id="70947"></path></svg>';
 
 // Code from https://github.com/valentine195/obsidian-admonition/blob/master/src/lang/helpers.ts
 const localeMap = {
@@ -73,12 +76,14 @@ function t(_str) {
 const DEFAULT_SETTINGS = {
     isTab: false,
     version: "0.4.5",
-    bgColor: "",
+    hColor: "",
+    bColor: "",
     hColor1: "#F36208",
     hColor2: "#81B300",
     hColor3: "#2485E3",
     hColor4: "#C32E94",
     hColor5: "#13C6C3",
+
     bColor1: "#FFB78B",
     bColor2: "#CDF469",
     bColor3: "#A0CCF6",
@@ -111,6 +116,7 @@ var 选至文首 = "";
 var 选至文末 = "";
 var 历史缩进 = "";
 var 按上档键 = false;
+var isCtrl = false;
 var isIndent = true;
 var isTool = false;
 var isGLS = false;
@@ -121,9 +127,59 @@ var isXHS = false;
 var isSB = false;
 var isXB = false;
 var isBgC = false;
+var isCTxt = false;
 var isGLS1 = false;
 var isGLS2 = false;
 var isGLS3 = false;
+
+// SOURCE https://stackoverflow.com/questions/36721830/convert-hsl-to-rgb-and-hex
+function hslToHex(h, s, l) {
+    l /= 100;
+    const a = (s * Math.min(l, 1 - l)) / 100;
+    const f = (n) => {
+        const k = (n + h / 30) % 12;
+        const color = l - a * Math.max(Math.min(k - 3, 9 - k, 1), -1);
+        return Math.round(255 * color)
+            .toString(16)
+            .padStart(2, "0"); // convert to Hex and prefix "0" if needed
+    };
+    return `#${f(0)}${f(8)}${f(4)}`;
+}
+// SOURCE https://stackoverflow.com/questions/46432335/hex-to-hsl-convert-javascript
+function hexToHSL(hex) {
+    var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    var r = parseInt(result[1], 16);
+    var g = parseInt(result[2], 16);
+    var b = parseInt(result[3], 16);
+    (r /= 255), (g /= 255), (b /= 255);
+    var max = Math.max(r, g, b), min = Math.min(r, g, b);
+    var h, s, l = (max + min) / 2;
+    if (max == min) {
+        h = s = 0; // achromatic
+    }
+    else {
+        var d = max - min;
+        s = l > 0.5 ? d / (2 - max - min) : d / (max + min);
+        switch (max) {
+            case r:
+                h = (g - b) / d + (g < b ? 6 : 0);
+                break;
+            case g:
+                h = (b - r) / d + 2;
+                break;
+            case b:
+                h = (r - g) / d + 4;
+                break;
+        }
+        h /= 6;
+    }
+    s = s * 100;
+    s = Math.round(s);
+    l = l * 100;
+    l = Math.round(l);
+    h = Math.round(360 * h);
+    return [h, s, l];
+}
 
 class MyPlugin extends obsidian.Plugin {
     constructor() {
@@ -428,76 +484,91 @@ class MyPlugin extends obsidian.Plugin {
 
         this.addCommand({
             id: 'text-Color1',
-            name: '转换橙色文字',
-            callback: () => this.转换文字颜色(this.settings.hColor1),
+            name: '转换彩色文字1',
+            callback: () => {
+                this.settings.hColor = this.settings.hColor1;
+                this.转换文字颜色();
+            },
             hotkeys: [{ modifiers: ["Mod","Shift"], key: "1" } ]
         });
         this.addCommand({
             id: 'text-Color2',
-            name: '转换红色文字',
-            callback: () => this.转换文字颜色(this.settings.hColor2),
+            name: '转换彩色文字2',
+            callback: () => {
+                this.settings.hColor = this.settings.hColor2;
+                this.转换文字颜色();
+            },
             hotkeys: [{ modifiers: ["Mod","Shift"], key: "2" } ]
         });
         this.addCommand({
             id: 'text-Color3',
-            name: '转换紫色文字',
-            callback: () => this.转换文字颜色(this.settings.hColor3),
+            name: '转换彩色文字3',
+            callback: () => {
+                this.settings.hColor = this.settings.hColor3;
+                this.转换文字颜色();
+            },
             hotkeys: [{ modifiers: ["Mod","Shift"], key: "3" } ]
         });
         this.addCommand({
             id: 'text-Color4',
-            name: '转换蓝色文字',
-            callback: () => this.转换文字颜色(this.settings.hColor4),
+            name: '转换彩色文字4',
+            callback: () => {
+                this.settings.hColor = this.settings.hColor4;
+                this.转换文字颜色();
+            },
             hotkeys: [{ modifiers: ["Mod","Shift"], key: "4" } ]
         });
         this.addCommand({
             id: 'text-Color5',
-            name: '转换绿色文字',
-            callback: () => this.转换文字颜色(this.settings.hColor5),
+            name: '转换彩色文字5',
+            callback: () => {
+                this.settings.hColor = this.settings.hColor5;
+                this.转换文字颜色();
+            },
             hotkeys: [{ modifiers: ["Mod","Shift"], key: "5" } ]
         });
         this.addCommand({
             id: 'text-background1',
-            name: '转换橙色背景',
+            name: '转换彩色背景1',
             callback: () => {
-                this.settings.bgColor = this.settings.bColor1;
-                this.转换背景颜色()
+                this.settings.bColor = this.settings.bColor1;
+                this.转换背景颜色();
             },
             hotkeys: [{ modifiers: ["Mod","Alt"], key: "1" } ]
         });
         this.addCommand({
             id: 'text-background2',
-            name: '转换红色背景',
+            name: '转换彩色背景2',
             callback: () => {
-                this.settings.bgColor = this.settings.bColor2;
-                this.转换背景颜色()
+                this.settings.bColor = this.settings.bColor2;
+                this.转换背景颜色();
             },
             hotkeys: [{ modifiers: ["Mod","Alt"], key: "2" } ]
         });
         this.addCommand({
             id: 'text-background3',
-            name: '转换紫色背景',
+            name: '转换彩色背景3',
             callback: () => {
-                this.settings.bgColor = this.settings.bColor3;
-                this.转换背景颜色()
+                this.settings.bColor = this.settings.bColor3;
+                this.转换背景颜色();
             },
             hotkeys: [{ modifiers: ["Mod","Alt"], key: "3" } ]
         });
         this.addCommand({
             id: 'text-background4',
-            name: '转换蓝色背景',
+            name: '转换彩色背景4',
             callback: () => {
-                this.settings.bgColor = this.settings.bColor4;
-                this.转换背景颜色()
+                this.settings.bColor = this.settings.bColor4;
+                this.转换背景颜色();
             },
             hotkeys: [{ modifiers: ["Mod","Alt"], key: "4" } ]
         });
         this.addCommand({
             id: 'text-background5',
-            name: '转换绿色背景',
+            name: '转换彩色背景5',
             callback: () => {
-                this.settings.bgColor = this.settings.bColor5;
-                this.转换背景颜色()
+                this.settings.bColor = this.settings.bColor5;
+                this.转换背景颜色();
             },
             hotkeys: [{ modifiers: ["Mod","Alt"], key: "5" } ]
         });
@@ -507,6 +578,17 @@ class MyPlugin extends obsidian.Plugin {
             name: '转换待办状态',
             callback: () => this.转换待办列表()
         });
+        this.addCommand({
+            id: 'y2w-list',
+            name: '有转无序列表()',
+            callback: () => this.有转无序列表()()
+        });
+        this.addCommand({
+            id: 'w2y-list',
+            name: '无转有序列表()',
+            callback: () => this.无转有序列表()()
+        });
+
         this.addCommand({
             id: 'add-tiankong',
             name: '转换挖空',
@@ -751,7 +833,7 @@ class MyPlugin extends obsidian.Plugin {
             setTimeout(() => {
                 // Really shove this baby to the end
                 this.html语法格式刷();
-                this.MD语法格式刷();
+                //this.MD语法格式刷();
                 this.实用命令菜单();
             });
         });
@@ -770,6 +852,8 @@ class MyPlugin extends obsidian.Plugin {
             历史行文本 = 当前行文本;
             if(所选文本==null){
                 return
+            }else if(isCTxt){
+                this.转换文字颜色();
             }else if(isBgC){
                 this.转换背景颜色();
             }else if(isGLS){
@@ -801,6 +885,12 @@ class MyPlugin extends obsidian.Plugin {
                         笔记全文.replaceRange(选至行首+"	", {line:当前行号,ch:0}, 当前光标); //后补4个空格
                     }
                 };
+
+                if(e.key =="Control"){
+                    isCtrl =true;
+                }else{
+                    isCtrl = false;
+                }
             };
         });
 
@@ -860,13 +950,25 @@ class MyPlugin extends obsidian.Plugin {
 
     实用命令菜单() {
         this.statusBarIcon = this.addStatusBarItem();
-        this.statusBarIcon.addClass("ewt-statusbar-button");
-        obsidian.setIcon(this.statusBarIcon, "go-to-file");
+        this.statusBarIcon.addClass("Enhanced-statusbar-button");
+        obsidian.addIcon("md语法图标", 全局命令图标);
+        obsidian.setIcon(this.statusBarIcon, "md语法图标");
         this.registerDomEvent(this.statusBarIcon, "click", (e) => {
-            const statusBarRect3 = this.statusBarIcon.parentElement.getBoundingClientRect();
-            const statusBarIconRect3 = this.statusBarIcon.getBoundingClientRect();
+            let 当前模式 = this.app.workspace.activeLeaf.view;
+		    if(当前模式.getMode() == "preview"){return};
+
+            const statusBarRect2 = this.statusBarIcon.parentElement.getBoundingClientRect();
+            const statusBarIconRect2 = this.statusBarIcon.getBoundingClientRect();
             const menu = new obsidian.Menu(this.app);
 
+            menu.addItem((item) => {
+                item.setTitle("打开设置面板");
+                item.setIcon("gear");
+                item.onClick(() =>{
+                    this.app.setting.open();
+                    this.app.setting.openTabById("Enhanced-editing");
+                });
+            });
             menu.addItem((item) => {
                 item.setTitle("去除所有空格");
                 item.setIcon("bracket-glyph");
@@ -928,69 +1030,6 @@ class MyPlugin extends obsidian.Plugin {
                 item.onClick(() =>this.批量转换内链());
             });
             menu.showAtPosition({
-                x: statusBarIconRect3.right + 10,
-                y: statusBarRect3.top - 5,
-            });
-        });
-    }
-
-    MD语法格式刷() {
-        this.statusBarIcon = this.addStatusBarItem();
-        this.statusBarIcon.addClass("ewt-statusbar-button");
-        obsidian.setIcon(this.statusBarIcon, "blocks");
-        this.registerDomEvent(this.statusBarIcon, "click", (e) => {
-            const statusBarRect2 = this.statusBarIcon.parentElement.getBoundingClientRect();
-            const statusBarIconRect2 = this.statusBarIcon.getBoundingClientRect();
-            const menu = new obsidian.Menu(this.app);
-            
-            
-            /*menu.addItem((item) => {
-                item.setTitle("挖___空");
-                item.setIcon("fullscreen");
-                item.onClick(() =>this.挖空格式刷());
-            });*/
-            menu.addItem((item) => {
-                item.setTitle(" 上标⁺⁻ⁿ ");
-                obsidian.addIcon("superscriptGlyph", superscriptGlyph);
-                item.setIcon("superscriptGlyph");
-                item.onClick(() =>this.上标格式刷());
-            });
-            menu.addItem((item) => {
-                item.setTitle(" 下标₁₂₃ ");
-                obsidian.addIcon("subscriptGlyph", subscriptGlyph);
-                item.setIcon("subscriptGlyph");
-                item.onClick(() =>this.下标格式刷());
-            });
-            menu.addItem((item) => {
-                item.setTitle("~~删除线~~");
-                item.setIcon("strikethrough-glyph");
-                item.onClick(() =>this.删除线格式刷());
-            });
-            menu.addItem((item) => {
-                item.setTitle(" *斜体* ");
-                item.setIcon("italic-glyph");
-                item.onClick(() =>this.斜体格式刷());
-            });
-            menu.addItem((item) => {
-                item.setTitle("**粗体**");
-                item.setIcon("bold-glyph");
-                item.onClick(() =>this.粗体格式刷());
-            });
-            menu.addItem((item) => {
-                item.setTitle("==高亮==");
-                item.setIcon("exit-fullscreen");
-                item.onClick(() =>this.高亮格式刷());
-            });
-            menu.addItem((item) => {
-                item.setTitle("关闭 格式刷");
-                item.setIcon("cross");
-                item.onClick(() =>{
-                    newNotice.hide();
-                    new obsidian.Notice("已关闭格式刷！");
-                    this.关闭格式刷();
-                });
-            });
-            menu.showAtPosition({
                 x: statusBarIconRect2.right + 5,
                 y: statusBarRect2.top - 5,
             });
@@ -1000,51 +1039,183 @@ class MyPlugin extends obsidian.Plugin {
     html语法格式刷() {
         this.statusBarIcon = this.addStatusBarItem();
         this.statusBarIcon.addClass("ewt-statusbar-button");
-        obsidian.setIcon(this.statusBarIcon, "highlight-glyph");
+        obsidian.addIcon("格式刷图标", 格式刷图标);
+        obsidian.addIcon("普通格式刷", 普通格式刷);
+        obsidian.setIcon(this.statusBarIcon, "格式刷图标");
         this.registerDomEvent(this.statusBarIcon, "click", (e) => {
+            const 格式刷1 ='<svg t="1650117667147" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12959" width="120" height="120"><path d="M409.856 331.9296l103.1936-103.168 307.712 307.712-103.168 103.168z" fill="#777677" p-id="12960"></path><path d="M384 358.4s-153.6 128-256 99.84c23.04 38.4 53.76 76.8 51.2 79.36 79.36 17.92 204.8-51.2 204.8-51.2l25.6 25.6s-133.12 102.4-204.8 76.8c66.56 99.84 212.48 225.28 256 256 97.28 0 230.4-179.2 230.4-179.2L384 358.4z" fill="'+this.settings.bColor1+'" p-id="12961"></path><path d="M641.3568 306.9952l153.856-153.856 103.1936 103.168-153.856 153.856z" fill="#777677" p-id="12962"></path></svg>';
+            const 格式刷2 ='<svg t="1650117667147" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12959" width="120" height="120"><path d="M409.856 331.9296l103.1936-103.168 307.712 307.712-103.168 103.168z" fill="#777677" p-id="12960"></path><path d="M384 358.4s-153.6 128-256 99.84c23.04 38.4 53.76 76.8 51.2 79.36 79.36 17.92 204.8-51.2 204.8-51.2l25.6 25.6s-133.12 102.4-204.8 76.8c66.56 99.84 212.48 225.28 256 256 97.28 0 230.4-179.2 230.4-179.2L384 358.4z" fill="'+this.settings.bColor2+'" p-id="12961"></path><path d="M641.3568 306.9952l153.856-153.856 103.1936 103.168-153.856 153.856z" fill="#777677" p-id="12962"></path></svg>';
+            const 格式刷3 ='<svg t="1650117667147" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12959" width="120" height="120"><path d="M409.856 331.9296l103.1936-103.168 307.712 307.712-103.168 103.168z" fill="#777677" p-id="12960"></path><path d="M384 358.4s-153.6 128-256 99.84c23.04 38.4 53.76 76.8 51.2 79.36 79.36 17.92 204.8-51.2 204.8-51.2l25.6 25.6s-133.12 102.4-204.8 76.8c66.56 99.84 212.48 225.28 256 256 97.28 0 230.4-179.2 230.4-179.2L384 358.4z" fill="'+this.settings.bColor3+'" p-id="12961"></path><path d="M641.3568 306.9952l153.856-153.856 103.1936 103.168-153.856 153.856z" fill="#777677" p-id="12962"></path></svg>';
+            const 格式刷4 ='<svg t="1650117667147" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12959" width="120" height="120"><path d="M409.856 331.9296l103.1936-103.168 307.712 307.712-103.168 103.168z" fill="#777677" p-id="12960"></path><path d="M384 358.4s-153.6 128-256 99.84c23.04 38.4 53.76 76.8 51.2 79.36 79.36 17.92 204.8-51.2 204.8-51.2l25.6 25.6s-133.12 102.4-204.8 76.8c66.56 99.84 212.48 225.28 256 256 97.28 0 230.4-179.2 230.4-179.2L384 358.4z" fill="'+this.settings.bColor4+'" p-id="12961"></path><path d="M641.3568 306.9952l153.856-153.856 103.1936 103.168-153.856 153.856z" fill="#777677" p-id="12962"></path></svg>';
+            const 格式刷5 ='<svg t="1650117667147" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="12959" width="120" height="120"><path d="M409.856 331.9296l103.1936-103.168 307.712 307.712-103.168 103.168z" fill="#777677" p-id="12960"></path><path d="M384 358.4s-153.6 128-256 99.84c23.04 38.4 53.76 76.8 51.2 79.36 79.36 17.92 204.8-51.2 204.8-51.2l25.6 25.6s-133.12 102.4-204.8 76.8c66.56 99.84 212.48 225.28 256 256 97.28 0 230.4-179.2 230.4-179.2L384 358.4z" fill="'+this.settings.bColor5+'" p-id="12961"></path><path d="M641.3568 306.9952l153.856-153.856 103.1936 103.168-153.856 153.856z" fill="#777677" p-id="12962"></path></svg>';
             
+            const 文本刷1 ='<svg t="1650187348745" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="41653" ><path d="M126.656 832c0-35.2 28.8-64 64-64H832c35.2 0 64 28.8 64 64s-28.8 64-64 64H190.656c-35.2 0-64-28.8-64-64z" fill="'+this.settings.hColor1+'" p-id="41654"></path><path d="M587.2 151.936C582.208 138.752 567.04 128 553.472 128H470.528a39.232 39.232 0 0 0-33.792 23.936l-201.024 528.128c-4.992 13.184 2.432 23.936 16.512 23.936h85.76c14.08 0 29.632-10.816 34.496-24l29.632-80A39.616 39.616 0 0 1 436.608 576h150.784c14.08 0 29.632 10.816 34.496 24l29.632 80a39.616 39.616 0 0 0 34.496 24h85.76c14.08 0 21.504-10.752 16.512-23.936L587.2 151.936zM502.912 338.048c4.992-13.184 13.184-13.184 18.176 0l32.768 86.016c4.992 13.184-2.432 23.936-16.512 23.936h-50.688c-14.08 0-21.504-10.752-16.512-23.936l32.768-86.016z" fill="#A5A6A7" p-id="41655"></path></svg>';
+            const 文本刷2 ='<svg t="1650187348745" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="41653" ><path d="M126.656 832c0-35.2 28.8-64 64-64H832c35.2 0 64 28.8 64 64s-28.8 64-64 64H190.656c-35.2 0-64-28.8-64-64z" fill="'+this.settings.hColor2+'" p-id="41654"></path><path d="M587.2 151.936C582.208 138.752 567.04 128 553.472 128H470.528a39.232 39.232 0 0 0-33.792 23.936l-201.024 528.128c-4.992 13.184 2.432 23.936 16.512 23.936h85.76c14.08 0 29.632-10.816 34.496-24l29.632-80A39.616 39.616 0 0 1 436.608 576h150.784c14.08 0 29.632 10.816 34.496 24l29.632 80a39.616 39.616 0 0 0 34.496 24h85.76c14.08 0 21.504-10.752 16.512-23.936L587.2 151.936zM502.912 338.048c4.992-13.184 13.184-13.184 18.176 0l32.768 86.016c4.992 13.184-2.432 23.936-16.512 23.936h-50.688c-14.08 0-21.504-10.752-16.512-23.936l32.768-86.016z" fill="#A5A6A7" p-id="41655"></path></svg>';
+            const 文本刷3 ='<svg t="1650187348745" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="41653" ><path d="M126.656 832c0-35.2 28.8-64 64-64H832c35.2 0 64 28.8 64 64s-28.8 64-64 64H190.656c-35.2 0-64-28.8-64-64z" fill="'+this.settings.hColor3+'" p-id="41654"></path><path d="M587.2 151.936C582.208 138.752 567.04 128 553.472 128H470.528a39.232 39.232 0 0 0-33.792 23.936l-201.024 528.128c-4.992 13.184 2.432 23.936 16.512 23.936h85.76c14.08 0 29.632-10.816 34.496-24l29.632-80A39.616 39.616 0 0 1 436.608 576h150.784c14.08 0 29.632 10.816 34.496 24l29.632 80a39.616 39.616 0 0 0 34.496 24h85.76c14.08 0 21.504-10.752 16.512-23.936L587.2 151.936zM502.912 338.048c4.992-13.184 13.184-13.184 18.176 0l32.768 86.016c4.992 13.184-2.432 23.936-16.512 23.936h-50.688c-14.08 0-21.504-10.752-16.512-23.936l32.768-86.016z" fill="#A5A6A7" p-id="41655"></path></svg>';
+            const 文本刷4 ='<svg t="1650187348745" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="41653" ><path d="M126.656 832c0-35.2 28.8-64 64-64H832c35.2 0 64 28.8 64 64s-28.8 64-64 64H190.656c-35.2 0-64-28.8-64-64z" fill="'+this.settings.hColor4+'" p-id="41654"></path><path d="M587.2 151.936C582.208 138.752 567.04 128 553.472 128H470.528a39.232 39.232 0 0 0-33.792 23.936l-201.024 528.128c-4.992 13.184 2.432 23.936 16.512 23.936h85.76c14.08 0 29.632-10.816 34.496-24l29.632-80A39.616 39.616 0 0 1 436.608 576h150.784c14.08 0 29.632 10.816 34.496 24l29.632 80a39.616 39.616 0 0 0 34.496 24h85.76c14.08 0 21.504-10.752 16.512-23.936L587.2 151.936zM502.912 338.048c4.992-13.184 13.184-13.184 18.176 0l32.768 86.016c4.992 13.184-2.432 23.936-16.512 23.936h-50.688c-14.08 0-21.504-10.752-16.512-23.936l32.768-86.016z" fill="#A5A6A7" p-id="41655"></path></svg>';
+            const 文本刷5 ='<svg t="1650187348745" class="icon" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="41653" ><path d="M126.656 832c0-35.2 28.8-64 64-64H832c35.2 0 64 28.8 64 64s-28.8 64-64 64H190.656c-35.2 0-64-28.8-64-64z" fill="'+this.settings.hColor5+'" p-id="41654"></path><path d="M587.2 151.936C582.208 138.752 567.04 128 553.472 128H470.528a39.232 39.232 0 0 0-33.792 23.936l-201.024 528.128c-4.992 13.184 2.432 23.936 16.512 23.936h85.76c14.08 0 29.632-10.816 34.496-24l29.632-80A39.616 39.616 0 0 1 436.608 576h150.784c14.08 0 29.632 10.816 34.496 24l29.632 80a39.616 39.616 0 0 0 34.496 24h85.76c14.08 0 21.504-10.752 16.512-23.936L587.2 151.936zM502.912 338.048c4.992-13.184 13.184-13.184 18.176 0l32.768 86.016c4.992 13.184-2.432 23.936-16.512 23.936h-50.688c-14.08 0-21.504-10.752-16.512-23.936l32.768-86.016z" fill="#A5A6A7" p-id="41655"></path></svg>';
+            
+            let 当前模式 = this.app.workspace.activeLeaf.view;
+		    if(当前模式.getMode() == "preview"){return};
+            if(isCTxt ||isBgC ||isCTS || isGLS || isSB || isSCS || isXB || isXHS || isXTS){
+                newNotice.hide();
+                new obsidian.Notice("已关闭格式刷！");
+                this.关闭格式刷();
+                return;
+            }
+
             const statusBarRect1 = this.statusBarIcon.parentElement.getBoundingClientRect();
             const statusBarIconRect1 = this.statusBarIcon.getBoundingClientRect();
             const menu = new obsidian.Menu(this.app);
             
+            const menuDom = menu.dom;
+            menuDom.addClass("Enhanced-editing-menu");
+
+            menu.addItem((item) => {
+                item.setTitle("设置面板");
+                item.setIcon("gear");
+                item.onClick(() =>{
+                    this.app.setting.open();
+                    this.app.setting.openTabById("Enhanced-editing");
+                });
+            });
             
             menu.addItem((item) => {
-                item.setTitle("荧光 "+this.settings.bColor1);
-                item.setIcon("highlight-glyph");
-                item.onClick(() =>this.切换多彩格式刷(this.settings.bColor1));
+                item.setTitle(" 上标⁺⁻ⁿ ");
+                item.setIcon("普通格式刷");
+                item.onClick(() =>this.上标格式刷());
             });
             menu.addItem((item) => {
-                item.setTitle("荧光 "+this.settings.bColor2);
-                item.setIcon("highlight-glyph");
-                item.onClick(() =>this.切换多彩格式刷(this.settings.bColor2));
+                item.setTitle(" 下标₁₂₃ ");
+                item.setIcon("普通格式刷");
+                item.onClick(() =>this.下标格式刷());
             });
             menu.addItem((item) => {
-                item.setTitle("荧光 "+this.settings.bColor3);
-                item.setIcon("highlight-glyph");
-                item.onClick(() =>this.切换多彩格式刷(this.settings.bColor3));
+                item.setTitle("~~删除线~~");
+                item.setIcon("普通格式刷");
+                item.onClick(() =>this.删除线格式刷());
             });
             menu.addItem((item) => {
-                item.setTitle("荧光 "+this.settings.bColor4);
-                item.setIcon("highlight-glyph");
-                item.onClick(() =>this.切换多彩格式刷(this.settings.bColor4));
+                item.setTitle(" *斜体* ");
+                item.setIcon("普通格式刷");
+                item.onClick(() =>this.斜体格式刷());
             });
             menu.addItem((item) => {
-                item.setTitle("荧光 "+this.settings.bColor5);
-                item.setIcon("highlight-glyph");
-                item.onClick(() =>this.切换多彩格式刷(this.settings.bColor5));
+                item.setTitle("**粗体**");
+                item.setIcon("普通格式刷");
+                item.onClick(() =>this.粗体格式刷());
             });
             menu.addItem((item) => {
-                item.setTitle("关闭 荧光笔");
+                item.setTitle("==高亮==");
+                item.setIcon("普通格式刷");
+                item.onClick(() =>this.高亮格式刷());
+            });
+            /*
+            menu.addItem((item) => {
+                item.setTitle("关闭 格式刷");
                 item.setIcon("cross");
                 item.onClick(() =>{
                     newNotice.hide();
-                    isBgC = false;
-                    new obsidian.Notice("已关闭多彩高亮格式刷！");
+                    new obsidian.Notice("已关闭格式刷！");
+                    this.关闭格式刷();
                 });
-            });
+            });*/
+         
+            const fontcoloritem = menuDom.createDiv({ cls: "menu-item fontcoloritem" });
+            const fontcolor_btn1 = new obsidian.ButtonComponent(fontcoloritem);
+            obsidian.addIcon("文本刷1", 文本刷1);
+            fontcolor_btn1
+            .setIcon("文本刷1")
+            .setClass("highlight_btn")
+            .setClass("fontcolor1")
+            .setTooltip("文本颜色1")
+            .onClick(() => this.彩字格式刷(this.settings.hColor1,'文本颜色1'));
+
+            const fontcolor_btn2 = new obsidian.ButtonComponent(fontcoloritem);
+            obsidian.addIcon("文本刷2", 文本刷2);
+            fontcolor_btn2
+            .setIcon("文本刷2")
+            .setClass("highlight_btn")
+            .setClass("fontcolor2")
+            .setTooltip("文本颜色2")
+            .onClick(() => this.彩字格式刷(this.settings.hColor2,'文本颜色2'));
+
+         const fontcolor_btn3 = new obsidian.ButtonComponent(fontcoloritem);
+            obsidian.addIcon("文本刷3", 文本刷3);
+            fontcolor_btn3
+            .setIcon("文本刷3")
+            .setClass("highlight_btn")
+            .setClass("fontcolor3")
+            .setTooltip("文本颜色3")
+            .onClick(() => this.彩字格式刷(this.settings.hColor3,'文本颜色3'));
+
+            const fontcolor_btn4 = new obsidian.ButtonComponent(fontcoloritem);
+            obsidian.addIcon("文本刷4", 文本刷4);
+            fontcolor_btn4
+            .setIcon("文本刷4")
+            .setClass("highlight_btn")
+            .setClass("fontcolor4")
+            .setTooltip("文本颜色4")
+            .onClick(() => this.彩字格式刷(this.settings.hColor4,'文本颜色4'));
+
+            const fontcolor_btn5 = new obsidian.ButtonComponent(fontcoloritem);
+            obsidian.addIcon("文本刷5", 文本刷5);
+            fontcolor_btn5
+            .setIcon("文本刷5")
+            .setClass("highlight_btn")
+            .setClass("fontcolor5")
+            .setTooltip("文本颜色5")
+            .onClick(() => this.彩字格式刷(this.settings.hColor5,'文本颜色5'));
+
+
+            const buttonItem = menuDom.createDiv({ cls: "menu-item buttonitem" });
+            const highlight_btn1 = new obsidian.ButtonComponent(buttonItem);
+            obsidian.addIcon("格式刷1", 格式刷1);
+            highlight_btn1
+            .setIcon("格式刷1")
+            .setClass("highlight_btn")
+            .setClass("highlight1")
+            .setTooltip("荧光笔1")
+            .onClick(() => this.彩底格式刷(this.settings.bColor1,'荧光笔1'));
+
+            const highlight_btn2 = new obsidian.ButtonComponent(buttonItem);
+            obsidian.addIcon("格式刷2", 格式刷2);
+            highlight_btn2
+            .setIcon("格式刷2")
+            .setClass("highlight_btn")
+            .setClass("highlight2")
+            .setTooltip("荧光笔2")
+            .onClick(() => this.彩底格式刷(this.settings.bColor2,'荧光笔2'));
+
+         const highlight_btn3 = new obsidian.ButtonComponent(buttonItem);
+            obsidian.addIcon("格式刷3", 格式刷3);
+            highlight_btn3
+            .setIcon("格式刷3")
+            .setClass("highlight_btn")
+            .setClass("highlight3")
+            .setTooltip("荧光笔3")
+            .onClick(() => this.彩底格式刷(this.settings.bColor3,'荧光笔3'));
+
+            const highlight_btn4 = new obsidian.ButtonComponent(buttonItem);
+            obsidian.addIcon("格式刷4", 格式刷4);
+            highlight_btn4
+            .setIcon("格式刷4")
+            .setClass("highlight_btn")
+            .setClass("highlight4")
+            .setTooltip("荧光笔4")
+            .onClick(() => this.彩底格式刷(this.settings.bColor4,'荧光笔4'));
+
+            const highlight_btn5 = new obsidian.ButtonComponent(buttonItem);
+            obsidian.addIcon("格式刷5", 格式刷5);
+            highlight_btn5
+            .setIcon("格式刷5")
+            .setClass("highlight_btn")
+            .setClass("highlight5")
+            .setTooltip("荧光笔5")
+            .onClick(() => this.彩底格式刷(this.settings.bColor5,'荧光笔5'));
 
             menu.showAtPosition({
-                x: statusBarIconRect1.right,
+                x: statusBarIconRect1.right-5,
                 y: statusBarRect1.top - 5,
             });
         });
@@ -1234,7 +1405,8 @@ class MyPlugin extends obsidian.Plugin {
 
     关闭格式刷() {
         //关闭所有格式刷
-        isBgC = false;  //多彩高亮刷
+        isBgC = false;  //多彩背景刷
+        isCTxt = false; //多彩文字刷
         isGLS =false;   //==普通高亮==
         isCTS =false;   //**粗体**
         isXTS = false;  //*斜体*
@@ -1504,46 +1676,6 @@ class MyPlugin extends obsidian.Plugin {
         }
     };
     
-    多彩高亮(xid) {
-        this.获取编辑器信息 ();
-        if(所选文本==null){
-            if(isGLS1 || isGLS2 || isGLS3){
-                newNotice.hide();
-                new obsidian.Notice("已关闭高亮格式刷！");
-                this.关闭格式刷();
-            }else{
-                this.关闭格式刷();
-                if(xid=="*"){
-                    isGLS1 = true;
-                    newNotice.hide();
-                    newNotice = new obsidian.Notice("*==蓝色格式刷==* 已打开！",0);
-                }else if(xid=="**"){
-                    isGLS2 = true;
-                    newNotice.hide();
-                    newNotice = new obsidian.Notice("**==蓝色格式刷==** 已打开！",0);
-                }else if(xid=="***"){
-                    isGLS3 = true;
-                    newNotice.hide();
-                    newNotice = new obsidian.Notice("***==蓝色格式刷==*** 已打开！",0);
-                }
-            }
-        }else{
-            var link = /==\*+[^=\*]+\*+==/;	//是否包含高亮符号
-            var link1 = /^[^=\*]*\*+==[^=\*]*|[^=\*]*==\*+[^=\*]*$/;	//是否只包含一侧的==*
-            if (link1.test(所选文本)){
-                return; //new obsidian.Notice("只有一侧出现==符号");
-            }else if (link.test(所选文本)){
-                所选文本 = 所选文本.replace(/\*+==|==\*+/g,"");    //new obsidian.Notice("成对出现==符号");
-                this.替换所选文本 (所选文本);
-            }else{
-                所选文本 = 所选文本.replace(/^([\t\s]*)([^\t\s])/mg,"$1"+xid+"==$2").replace(/([^\t\s])([\t\s]*)$/mg,"$1=="+xid+"$2");
-                所选文本 = 所选文本.replace(/^==\*+\*==$/mg,"");
-                this.替换所选文本 (所选文本);
-                编辑模式.exec("goRight");
-            }
-        }
-    };
-
     斜体格式刷(){
         this.获取编辑器信息 ();
         if(所选文本==null){
@@ -2117,14 +2249,23 @@ class MyPlugin extends obsidian.Plugin {
         编辑模式.setCursor({line:当前行号,ch:位置});
     };
 
-    转换文字颜色(_color) {
-        let _html0 = /\<font color=[0-9a-zA-Z#]+[^\<\>]*\>[^\<\>]+\<\/font\>/g;
-        let _html1 = /^\<font color=[0-9a-zA-Z#]+[^\<\>]*\>([^\<\>]+)\<\/font\>$/;
-        let _html2 = '\<font color='+_color+'\>$1\<\/font\>';
-        let _html3 = /\<font color=[^\<]*$|^[^\>]*font\>/g;	//是否只包含一侧的<>
-        //new obsidian.Notice(所选文本);
+    彩字格式刷(_color){
+        this.关闭格式刷();
+        newNotice.hide();
+        isCTxt = true;
+        this.settings.hColor = _color;
+        newNotice = new obsidian.Notice("多彩文字格式刷 已打开！",0);
+    }
+
+    转换文字颜色() {
         this.获取编辑器信息 ();
         if(所选文本==null){return};
+
+        let _html0 = /\<font color=[0-9a-zA-Z#]+[^\<\>]*\>[^\<\>]+\<\/font\>/g;
+        let _html1 = /^\<font color=[0-9a-zA-Z#]+[^\<\>]*\>([^\<\>]+)\<\/font\>$/;
+        let _html2 = '\<font color='+this.settings.hColor+'\>$1\<\/font\>';
+        let _html3 = /\<font color=[^\<]*$|^[^\>]*font\>/g;	//是否只包含一侧的<>
+
         if (_html3.test(所选文本)){
             return; //new obsidian.Notice("不能转换颜色！");
         }else if (_html0.test(所选文本)){
@@ -2138,40 +2279,38 @@ class MyPlugin extends obsidian.Plugin {
             所选文本 = 所选文本.replace(/^(.+)$/mg,_html2);  //new obsidian.Notice("可以转换颜色！");
         }
         this.替换所选文本 (所选文本);
+        编辑模式.exec("goRight");
     };
 
-    切换多彩格式刷(_color){
+    彩底格式刷(_color){
         this.关闭格式刷();
         newNotice.hide();
         isBgC = true;
-        this.settings.bgColor = _color;
-        newNotice = new obsidian.Notice("多彩高亮格式刷 已打开！\n当前颜色为："+_color,0);
+        this.settings.bColor = _color;
+        newNotice = new obsidian.Notice("多彩背景格式刷 已打开！",0);
     }
     转换背景颜色() {
         this.获取编辑器信息 ();
-        //new obsidian.Notice(this.settings.bgColor);
-        if(所选文本==null){
-            return;
-        }else{
-            let _html0 = /\<span style=[\"'][^\<\>]+:[0-9a-zA-Z#]+[\"'][^\<\>]*\>[^\<\>]+\<\/span\>/g;
-            let _html1 = /^\<span style=[\"'][^\<\>]+:[0-9a-zA-Z#]+[\"'][^\<\>]*\>([^\<\>]+)\<\/span\>$/;
-            let _html2 = '\<span style=\"background\:'+this.settings.bgColor+'\"\>$1\<\/span\>';
-            let _html3 = /\<span style=[^\<]*$|^[^\>]*span\>/g;	//是否只包含一侧的<>
-            if (_html3.test(所选文本)){
-                return; //new obsidian.Notice("不能转换颜色！");
-            }else if (_html0.test(所选文本)){
-                if(_html1.test(所选文本)){
-                    所选文本 = 所选文本.replace(_html1,_html2); 
-                }else{
-                    所选文本 = 所选文本.replace(/\<span style=[\"'][^\<\>]+:[0-9a-zA-Z#]+[\"'][^\<\>]*\>|\<\/span\>/g,"");
-                    //new obsidian.Notice("需要去除颜色！");
-                }
+        if(所选文本==null){return};
+    
+        let _html0 = /\<span style=[\"'][^\<\>]+:[0-9a-zA-Z#]+[\"'][^\<\>]*\>[^\<\>]+\<\/span\>/g;
+        let _html1 = /^\<span style=[\"'][^\<\>]+:[0-9a-zA-Z#]+[\"'][^\<\>]*\>([^\<\>]+)\<\/span\>$/;
+        let _html2 = '\<span style=\"background\:'+this.settings.bColor+'\"\>$1\<\/span\>';
+        let _html3 = /\<span style=[^\<]*$|^[^\>]*span\>/g;	//是否只包含一侧的<>
+        if (_html3.test(所选文本)){
+            return; //new obsidian.Notice("不能转换颜色！");
+        }else if (_html0.test(所选文本)){
+            if(_html1.test(所选文本)){
+                所选文本 = 所选文本.replace(_html1,_html2); 
             }else{
-                所选文本 = 所选文本.replace(/^(.+)$/mg,_html2);  //new obsidian.Notice("可以转换颜色！");
+                所选文本 = 所选文本.replace(/\<span style=[\"'][^\<\>]+:[0-9a-zA-Z#]+[\"'][^\<\>]*\>|\<\/span\>/g,"");
+                //new obsidian.Notice("需要去除颜色！");
             }
-            this.替换所选文本 (所选文本);
-            编辑模式.exec("goRight");
+        }else{
+            所选文本 = 所选文本.replace(/^(.+)$/mg,_html2);  //new obsidian.Notice("可以转换颜色！");
         }
+        this.替换所选文本 (所选文本);
+        编辑模式.exec("goRight");
     };
     
     转换无语法文本() {
@@ -2326,6 +2465,20 @@ class MyPlugin extends obsidian.Plugin {
             //new obsidian.Notice("选至文末\n"+选至文末);
             笔记全文.replaceRange(后表部分, {line:当前行号,ch:0},{line:当前行号+后表行数,ch:编辑模式.getLine(当前行号+后表行数).length});
         };
+    };
+
+    有转无序列表() {
+        this.获取编辑器信息 ();
+        if(所选文本==null){return};
+        所选文本 = 所选文本.replace(/(?<=^\s*)[0-9]+\.\s/mg,"- ");
+        this.替换所选文本 (所选文本);
+    };
+
+    无转有序列表() {
+        this.获取编辑器信息 ();
+        if(所选文本==null){return};
+        所选文本 = 所选文本.replace(/(?<=^\s*)[\-\+]\s/mg,"1. ");
+        this.替换所选文本 (所选文本);
     };
     
     转换待办列表() {
@@ -2919,8 +3072,55 @@ class editSettingsTab extends obsidian.PluginSettingTab {
         div1.appendChild(mdText);
 
         new obsidian.Setting(containerEl)
-            .setName('📣 设置设置彩色文字效果（Html语法）功能。')
+            .setName('📣 设置彩色文字效果（Html语法）功能。')
+            .setDesc('点击颜色块调节颜色，在笔记编辑区划选文本后按下「Ctrl+Shift+ 1-5」快捷键，即可转为相应颜色的文本。')
 
+        const textColourPicker1 = containerEl.createEl("input", {
+            type: "color",
+        });
+        textColourPicker1.value = this.plugin.settings.hColor1;
+        textColourPicker1.addEventListener("change", async () => {
+            this.plugin.settings.hColor1 = textColourPicker1.value;
+            await this.plugin.saveSettings();
+        });
+
+        const textColourPicker2 = containerEl.createEl("input", {
+            type: "color",
+        });
+        textColourPicker2.value = this.plugin.settings.hColor2;
+        textColourPicker2.addEventListener("change", async () => {
+            this.plugin.settings.hColor2 = textColourPicker2.value;
+            await this.plugin.saveSettings();
+        });
+        
+        const textColourPicker3 = containerEl.createEl("input", {
+            type: "color",
+        });
+        textColourPicker3.value = this.plugin.settings.hColor3;
+        textColourPicker3.addEventListener("change", async () => {
+            this.plugin.settings.hColor3 = textColourPicker3.value;
+            await this.plugin.saveSettings();
+        });
+
+        const textColourPicker4 = containerEl.createEl("input", {
+            type: "color",
+        });
+        textColourPicker4.value = this.plugin.settings.hColor4;
+        textColourPicker4.addEventListener("change", async () => {
+            this.plugin.settings.hColor4 = textColourPicker4.value;
+            await this.plugin.saveSettings();
+        });
+
+        const textColourPicker5 = containerEl.createEl("input", {
+            type: "color",
+        });
+        textColourPicker5.value = this.plugin.settings.hColor5;
+        textColourPicker5.addEventListener("change", async () => {
+            this.plugin.settings.hColor5 = textColourPicker5.value;
+            await this.plugin.saveSettings();
+        });
+
+        /*
         new obsidian.Setting(containerEl)
         .setName('转换文字颜色「Ctrl+Shift+1」')
         .setDesc('设置文字颜色值（#000000）')
@@ -2932,67 +3132,58 @@ class editSettingsTab extends obsidian.PluginSettingTab {
                 this.plugin.saveSettings();
             });
         });
-        new obsidian.Setting(containerEl)
-        .setName('转换文字颜色「Ctrl+Shift+2」')
-        .setDesc('设置文字颜色值（#000000）')
-        .addText(text => {
-            text
-                .setValue(this.plugin.settings.hColor2)
-                .onChange((value) => {
-                this.plugin.settings.hColor2 = value;
-                this.plugin.saveSettings();
-            });
-        });
-        new obsidian.Setting(containerEl)
-        .setName('转换文字颜色「Ctrl+Shift+3」')
-        .setDesc('设置文字颜色值（#000000）')
-        .addText(text => {
-            text
-                .setValue(this.plugin.settings.hColor3)
-                .onChange((value) => {
-                this.plugin.settings.hColor3 = value;
-                this.plugin.saveSettings();
-            });
-        });
-        new obsidian.Setting(containerEl)
-        .setName('转换文字颜色「Ctrl+Shift+4」')
-        .setDesc('设置文字颜色值（#000000）')
-        .addText(text => {
-            text
-                .setValue(this.plugin.settings.hColor4)
-                .onChange((value) => {
-                this.plugin.settings.hColor4 = value;
-                this.plugin.saveSettings();
-            });
-        });
-        new obsidian.Setting(containerEl)
-        .setName('转换文字颜色「Ctrl+Shift+5」')
-        .setDesc('设置文字颜色值（#000000）')
-        .addText(text => {
-            text
-                .setValue(this.plugin.settings.hColor5)
-                .onChange((value) => {
-                settings.hColor5 = value;
-                this.plugin.saveSettings();
-            });
-        });
-
+        */
 
         new obsidian.Setting(containerEl)
-            .setName('📣 设置设置彩色背景效果（Html语法）功能。')
-            .setDesc('在状态栏显示5个格式刷按钮，点击数字后，鼠标划选文字即可多彩高亮，点击「关闭」退出格式刷。')
+            .setName('📣 设置彩色背景效果（Html语法）功能。')
+            .setDesc('点击颜色块调节颜色，在笔记编辑区划选文本后按下「Ctrl+Alt+ 1-5」快捷键，即可转为相应背景颜色的文本。')
 
-        new obsidian.Setting(containerEl)
-            .setName('转换背景颜色「Ctrl+Alt+1」')
-            .setDesc('设置背景颜色值（#000000）')
-            .addText(text => {
-                text
-                    .setValue(this.plugin.settings.bColor1)
-                    .onChange((value) => {
-                    this.plugin.settings.bColor1 = value;
-                    this.plugin.saveSettings();
-                });
-            });
+        const heatmapColourPicker1 = containerEl.createEl("input", {
+            type: "color",
+        });
+        heatmapColourPicker1.value = this.plugin.settings.bColor1;
+        heatmapColourPicker1.addEventListener("change", async () => {
+            this.plugin.settings.bColor1 = heatmapColourPicker1.value;
+            await this.plugin.saveSettings();
+        });
+
+        const heatmapColourPicker2 = containerEl.createEl("input", {
+            type: "color",
+        });
+        heatmapColourPicker2.value = this.plugin.settings.bColor2;
+        heatmapColourPicker2.addEventListener("change", async () => {
+            this.plugin.settings.bColor2 = heatmapColourPicker2.value;
+            await this.plugin.saveSettings();
+        });
+        
+        const heatmapColourPicker3 = containerEl.createEl("input", {
+            type: "color",
+        });
+        heatmapColourPicker3.value = this.plugin.settings.bColor3;
+        heatmapColourPicker3.addEventListener("change", async () => {
+            this.plugin.settings.bColor3 = heatmapColourPicker3.value;
+            await this.plugin.saveSettings();
+        });
+
+        const heatmapColourPicker4 = containerEl.createEl("input", {
+            type: "color",
+        });
+        heatmapColourPicker4.value = this.plugin.settings.bColor4;
+        heatmapColourPicker4.addEventListener("change", async () => {
+            this.plugin.settings.bColor4 = heatmapColourPicker4.value;
+            await this.plugin.saveSettings();
+        });
+
+        const heatmapColourPicker5 = containerEl.createEl("input", {
+            type: "color",
+        });
+        heatmapColourPicker5.value= this.plugin.settings.bColor5;
+        heatmapColourPicker5.addEventListener("change", async () => {
+            this.plugin.settings.bColor5 = heatmapColourPicker5.value;
+            await this.plugin.saveSettings();
+        });
+
+        /*
         new obsidian.Setting(containerEl)
             .setName('转换背景颜色「Ctrl+Alt+2」')
             .setDesc('设置背景颜色值（#000000）')
@@ -3004,42 +3195,7 @@ class editSettingsTab extends obsidian.PluginSettingTab {
                     this.plugin.saveSettings();
                 });
             });
-
-        new obsidian.Setting(containerEl)
-            .setName('转换背景颜色「Ctrl+Alt+3」')
-            .setDesc('设置背景颜色值（#000000）')
-            .addText(text => {
-                text
-                    .setValue(this.plugin.settings.bColor3)
-                    .onChange((value) => {
-                    this.plugin.settings.bColor3 = value;
-                    this.plugin.saveSettings();
-                });
-            });
-
-        new obsidian.Setting(containerEl)
-            .setName('转换背景颜色「Ctrl+Alt+4」')
-            .setDesc('设置背景颜色值（#000000）')
-            .addText(text => {
-                text
-                    .setValue(this.plugin.settings.bColor4)
-                    .onChange((value) => {
-                    this.plugin.settings.bColor4 = value;
-                    this.plugin.saveSettings();
-                });
-            });
-
-        new obsidian.Setting(containerEl)
-            .setName('转换背景颜色「Ctrl+Alt+5」')
-            .setDesc('设置背景颜色值（#000000）')
-            .addText(text => {
-                text
-                    .setValue(this.plugin.settings.bColor5)
-                    .onChange((value) => {
-                    this.plugin.settings.bColor5 = value;
-                    this.plugin.saveSettings();
-                });
-            });
+        */
 
 
         new obsidian.Setting(containerEl)
@@ -3146,7 +3302,9 @@ class editSettingsTab extends obsidian.PluginSettingTab {
         });
         var qqText = document.createDocumentFragment();
         qqText.appendChild(document.createElement('br'));
-        qqText.appendText('🆗 欢迎向蚕子(QQ:312815311) 提出操作需求和建议，我们来共同增强Obsidian软件的编辑功能！');
+        qqText.appendText('🆗 欢迎大家向蚕子(QQ:312815311) 提出操作需求和建议，我们来共同增强编辑功能！');
+        qqText.appendChild(document.createElement('br'));
+        qqText.appendText('🆗 感谢Cuman(QQ:35669852)的指导与调试。');
         div6.appendChild(qqText);
     };
 };
