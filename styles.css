@@ -52,4 +52,76 @@
 body .recent-files-donation{
     text-align:left;	
 }
-  
+
+/*设置 *斜体* 语法为镂空+下划线效果*/
+.cm-em ,.markdown-preview-view em{
+    font-style: normal;
+    text-decoration: underline;
+    text-decoration-color: var(--text-normal);
+    color: transparent;
+    background-color: transparent;
+}
+
+/*鼠标触击时恢复文字颜色及背景色*/
+.cm-em:hover ,.markdown-preview-view em:hover{
+    color: var(--text-normal);
+    background-color: transparent;
+}
+
+
+/* 将 %%注释内容%% 显示为 右侧批注效果 */
+.cm-comment-start,
+.cm-comment-end {
+  /* color:black !important; */
+  font-size:0em;
+  letter-spacing:-1em;
+}
+
+.cm-comment-end::after {
+  content: " 💬 ";
+  color:#42b226d8;
+  font-size:16px;
+  /* text-shadow: 0 0 0 #069e57; */
+  position:relative;
+  bottom:10px;
+  opacity: 80%;
+}
+
+span.cm-comment:not(.cm-comment-end):not(.cm-comment-start):not(.cm-hmd-codeblock) {
+  position:relative;
+  z-index:100!important;
+  display:block;
+  margin-left:10px;
+  margin-right:-175px;
+  margin-top:-10px;
+  float:right;
+  width:250px;
+  font-size:.9em;
+  padding:10px;
+  border: 1px solid rgb(199, 198, 198);
+  /* box-shadow: 5px 8px #609486; */
+  color: #1a1a1a;
+  opacity: 80%;
+  background:#42b2263a;
+}
+
+.cm-active .cm-comment-start,
+.cm-active .cm-comment-end {
+  /* z-index:100!important; */
+  color:#f7a50e !important;
+  font-size:0.5em;
+  letter-spacing:initial;
+}
+
+.cm-active .cm-comment:not(.cm-comment-end):not(.cm-comment-start):not(.cm-hmd-codeblock){
+  /* margin-left:10px;
+  margin-right:-10px;
+  margin-top:-25px; */
+  color: #212121;
+  /* opacity: 100%; */
+}
+
+
+.cm-active .cm-comment-end::after {
+  display:none;
+}
