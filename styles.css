@@ -53,7 +53,8 @@ body .recent-files-donation{
     text-align:left;	
 }
 
-/*设置 *斜体* 语法为镂空+下划线效果*/
+
+/*设置 *斜体* 语法为镂空+下划线效果
 .cm-em ,.markdown-preview-view em{
     font-style: normal;
     text-decoration: underline;
@@ -62,66 +63,139 @@ body .recent-files-donation{
     background-color: transparent;
 }
 
-/*鼠标触击时恢复文字颜色及背景色*/
+/*鼠标触击时恢复文字颜色及背景色
 .cm-em:hover ,.markdown-preview-view em:hover{
     color: var(--text-normal);
     background-color: transparent;
 }
 
+*/
 
-/* 将 %%注释内容%% 显示为 右侧批注效果 */
-.cm-comment-start,
-.cm-comment-end {
-  /* color:black !important; */
-  font-size:0em;
-  letter-spacing:-1em;
-}
-
-.cm-comment-end::after {
-  content: " 💬 ";
-  color:#42b226d8;
-  font-size:16px;
-  /* text-shadow: 0 0 0 #069e57; */
-  position:relative;
-  bottom:10px;
-  opacity: 80%;
-}
-
-span.cm-comment:not(.cm-comment-end):not(.cm-comment-start):not(.cm-hmd-codeblock) {
-  position:relative;
-  z-index:100!important;
-  display:block;
-  margin-left:10px;
-  margin-right:-175px;
-  margin-top:-10px;
-  float:right;
-  width:250px;
-  font-size:.9em;
-  padding:10px;
-  border: 1px solid rgb(199, 198, 198);
-  /* box-shadow: 5px 8px #609486; */
-  color: #1a1a1a;
-  opacity: 80%;
-  background:#42b2263a;
-}
-
-.cm-active .cm-comment-start,
-.cm-active .cm-comment-end {
-  /* z-index:100!important; */
-  color:#f7a50e !important;
-  font-size:0.5em;
-  letter-spacing:initial;
-}
-
-.cm-active .cm-comment:not(.cm-comment-end):not(.cm-comment-start):not(.cm-hmd-codeblock){
-  /* margin-left:10px;
-  margin-right:-10px;
-  margin-top:-25px; */
-  color: #212121;
-  /* opacity: 100%; */
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="settings"]+ .menu-separator::before
+{
+content: "MD标准格式刷";
+font-size: 0.6em;
+margin-top: -2px;
+position: absolute;
+left: 25%;
+text-align: center;
+width: 8em;
+line-height: 5px;
+color: var(--text-muted);
+background-color: var(--background-primary);
 }
 
 
-.cm-active .cm-comment-end::after {
-  display:none;
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="format"]:nth-child(7) .menu-item-title  
+{
+    text-decoration: line-through;
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="format"]:nth-child(8)   
+{
+  color: var(--accent-em);
+  font-family: var(--font-family-em);
+  font-style: italic;
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="format"]:nth-child(9)   
+{
+  font-weight: bold;
+  color: var(--accent-strong) ;
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="format"]+ .menu-separator::before
+{
+content: "多彩高亮MD刷";
+font-size: 0.6em;
+margin-top: -2px;
+position: absolute;
+left: 25%;
+text-align: center;
+width: 8em;
+line-height: 5px;
+color: var(--text-muted);
+background-color: var(--background-primary);
+}
+
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="highlight"]:nth-child(11)   
+{
+  background-color: var(--text-highlight-bg);
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="highlight"]:nth-child(12)   
+{
+  background-color: var(--bg-color-highlight-1);
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="highlight"]:nth-child(13)   
+{
+  background-color: var(--bg-color-highlight-2);
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="highlight"]:nth-child(14)   
+{
+  background-color: var(--bg-color-highlight-3);
+}
+
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="highlight"]+ .menu-separator::before
+{
+content: "涂黑挖空MD刷";
+font-size: 0.6em;
+margin-top: -1px;
+position: absolute;
+left: 25%;
+text-align: center;
+width: 8em;
+line-height: 5px;
+color: var(--text-muted);
+background-color: var(--background-primary);
+}
+
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="paint"]:nth-child(16)::after   
+{
+  content: "███";
+  letter-spacing: -1px;
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="paint"]:nth-child(17)::after   
+{
+  content: "🟧🟧";
+  letter-spacing: -8px;
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="paint"]:nth-child(18)::after   
+{
+  content: "_____";
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="paint"]+ .menu-separator
+{
+height: 5px;
+ 
+
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="paint"]+ .menu-separator::before
+{
+content: "html多彩刷";
+font-size: 0.6em;
+margin-top: 3px;
+position: absolute;
+left: 30%;
+text-align: center;
+width: 30%;
+line-height: 5px;
+color: var(--text-muted);
+background-color: var(--background-primary);
+}
+div.menu.Enhanced-editing-menu > .menu-item:is([data-section="fontcolor"],[data-section="highlight_html"]) {
+  display: inline-flex;
+  padding: 0px 0px 15px 10px;
+  align-items: center;
+}
+div.menu.Enhanced-editing-menu > .menu-item:is([data-section="fontcolor"],[data-section="highlight_html"]) .menu-item-icon
+{
+ margin-right: -0.5em;
+ margin-left: 5px;
+}
+div.menu.Enhanced-editing-menu > div.menu-item[data-section="fontcolor"]+ .menu-separator
+{
+  border-bottom:none;
+  margin: -8px;
+}
+
+div.menu.Enhanced-editing-menu > div.menu-item
+{
+font-size: 12px;
 }
