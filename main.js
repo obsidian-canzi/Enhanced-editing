@@ -636,12 +636,22 @@ class MyPlugin extends obsidian.Plugin {
         this.addCommand({
             id: 'y2w-list',
             name: '有转无序列表()',
-            callback: () => this.有转无序列表()()
+            callback: () => this.有转无序列表()
         });
         this.addCommand({
             id: 'w2y-list',
             name: '无转有序列表()',
-            callback: () => this.无转有序列表()()
+            callback: () => this.无转有序列表()
+        });
+        this.addCommand({
+            id: 'm2w-list',
+            name: '多行转无序列表()',
+            callback: () => this.多行转无序列表()
+        }); 
+        this.addCommand({
+            id: 'm2y-list',
+            name: '多行转有序列表()',
+            callback: () => this.多行转有序列表()
         });
 
         this.addCommand({
@@ -1057,7 +1067,7 @@ class MyPlugin extends obsidian.Plugin {
                     //};
                 }
                  
-            }else if(isText||isCTxt ||isBgC ||isCTS || isGLS || isGLS1 ||isGLS2 ||isGLS3 ||isSB || isSCS || isXB || isXHS || isXTS || isTHS ||isTCS||isWKS){
+            }else if(isText || isCTxt ||isBgC || isCTS || isGLS || isGLS1 || isGLS2 ||isGLS3 || isSB || isSCS || isXB || isXHS || isXTS || isTHS || isTCS || isWKS || isbt1Txt || isbt2Txt){
                 this.关闭格式刷();
                 newNotice = new obsidian.Notice("已关闭格式刷！");
             }
@@ -3265,7 +3275,41 @@ class MyPlugin extends obsidian.Plugin {
         所选文本 = 所选文本.replace(/(?<=^\s*)[\-\+]\s/mg,"1. ");
         this.替换所选文本 (所选文本);
     };
-    
+
+    多行转无序列表() {
+        this.获取编辑器信息();
+        if (!笔记全文 || !所选文本) return;
+        console.log(所选文本);
+        所选文本 = 所选文本
+        .split('\n')
+        .map(line => {
+            if (line.trim() === '') {
+                return line; // 如果是空行则保留原始行
+            } else {
+                return '- ' + line; // 否则添加无序列表标记
+            }
+        })
+        .join('\n');
+        this.替换所选文本(所选文本);
+    }
+
+    多行转有序列表() {
+        this.获取编辑器信息();
+        if (!笔记全文 || !所选文本) return;
+        let index = 0;
+        所选文本 = 所选文本
+        .split('\n')
+        .map((line) => {
+            if (line.trim() === '') {
+                return line; // 如果是空行则保留原始行
+            } else {
+                return `${index++ + 1}. ${line}`; // 否则添加有序列表标记
+            }
+        })
+        .join('\n');
+        this.替换所选文本(所选文本);
+    }
+
     转换待办列表() {
         this.获取编辑器信息 ();
         let 当前新文本 = 当前行文本.replace(/(?<=^\s*([\-\+]|[0-9]+\.)\s\[) (?=\]\s[^\s])/mg,"x☀");
