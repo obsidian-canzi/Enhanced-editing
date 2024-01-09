@@ -2131,7 +2131,7 @@ class MyPlugin extends obsidian.Plugin {
             }else{
                 this.关闭格式刷();
                 isMLatex = true;
-                newNotice = new obsidian.Notice("$$多行公式刷$$ 已打开！\n首尾不要选中标点。",0);
+                newNotice = new obsidian.Notice("$$多行公式刷$$ 已打开！",0);
             };
         };
     };
@@ -2228,7 +2228,7 @@ class MyPlugin extends obsidian.Plugin {
             if (link1.test(所选文本)){
                 return; //new obsidian.Notice("只有一侧出现==符号");
             }else if (link.test(所选文本)){
-                所选文本 = 所选文本.replace(/(\$\$\n|\n\$\$)/g,"");    //new obsidian.Notice("成对出现$$符号");
+                所选文本 = 所选文本.replace(/(\$\$\n?|\n?\$\$)/g,"");    //new obsidian.Notice("成对出现$$符号");
                 this.替换所选文本 (所选文本);
             }else{
                 所选文本 = 所选文本.replace(/^([\t\s]*)([^\t\s])/g,"$1$$$$\n$2").replace(/([^\t\s])([\t\s]*)$/g,"$1\n$$$$$2");
